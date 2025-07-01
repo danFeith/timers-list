@@ -1,34 +1,40 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTimerStyles } from './timerStyles';
+import Button from '../button/button';
 
-interface TimerProps {
-    onDelete: () => void;
+interface ITimerProps {
+    id: string;
+    onDelete: (id: string) => void;
 }
 
-const TIMER_INTERVAL_MS = 10;
-
-const Timer = ({ onDelete }: TimerProps) => {
+const Timer = ({ id, onDelete }: ITimerProps) => {
     const classes = useTimerStyles();
     const [time, setTime] = useState(0);
     const [isRunning, setIsRunning] = useState(true);
-    const intervalRef = useRef<number | null>(null);
+    const animationFrameRef = useRef<number | null>(null);
+    const lastTimestampRef = useRef<number>(performance.now());
+
+    const tick = (timestamp: number) => {
+        const delta = timestamp - lastTimestampRef.current;
+        setTime(prev => prev + Math.floor(delta));
+        lastTimestampRef.current = timestamp;
+        animationFrameRef.current = requestAnimationFrame(tick);
+    };
+
 
     useEffect(() => {
         if (isRunning) {
-            intervalRef.current = setInterval(() => {
-                setTime((prev) => prev + TIMER_INTERVAL_MS);
-            }, TIMER_INTERVAL_MS);
-        } else {
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current);
-            }
+            lastTimestampRef.current = performance.now();
+            animationFrameRef.current = requestAnimationFrame(tick);
+        } else if (animationFrameRef.current) {
+            cancelAnimationFrame(animationFrameRef.current);
         }
+
         return () => {
-            if (intervalRef.current) clearInterval(intervalRef.current);
+            if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
         };
     }, [isRunning]);
 
-    const reset = () => setTime(0);
 
     const formatTime = () => {
         const seconds = Math.floor(time / 1000);
@@ -36,15 +42,18 @@ const Timer = ({ onDelete }: TimerProps) => {
         return `${seconds}.${ms}`;
     };
 
+
+    const reset = useCallback(() => setTime(0), []);
+    const onDeleteTimer = useCallback(() => onDelete(id), [id, onDelete]);
+    const toggleIsRunning = useCallback(() => setIsRunning(r => !r), []);
+
     return (
         <div className={classes.timerRow}>
             <div className={classes.timerValue}>{formatTime()}</div>
             <div className={classes.timerControls}>
-                <button onClick={() => setIsRunning((r) => !r)}>
-                    {isRunning ? 'Pause' : 'Resume'}
-                </button>
-                <button onClick={reset}>Reset</button>
-                <button onClick={onDelete}>Delete</button>
+                <Button text={isRunning ? 'Pause' : 'Resume'} onClick={toggleIsRunning} />
+                <Button onClick={reset} text='Reset' />
+                <Button onClick={onDeleteTimer} text='Delete' />
             </div>
         </div>
     );

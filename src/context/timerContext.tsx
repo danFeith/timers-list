@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useMemo, useState } from 'react';
 import type { ReactNode } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 
@@ -23,16 +23,19 @@ export const useTimerContext = () => {
 export const TimerProvider = ({ children }: { children: ReactNode }) => {
     const [timers, setTimers] = useState<TimerData[]>([]);
 
-    const addTimer = () => {
-        setTimers((prev) => [...prev, { id: uuidv4() }]);
-    };
+    const value = useMemo(() => ({
+        timers,
+        addTimer: () => {
+            setTimers((prev) => [...prev, { id: uuidv4() }]);
+        },
+        removeTimer: (id: string) => {
+            setTimers((prev) => prev.filter((timer) => timer.id !== id));
+        }
 
-    const removeTimer = (id: string) => {
-        setTimers((prev) => prev.filter((timer) => timer.id !== id));
-    };
+    }), [timers])
 
     return (
-        <TimerContext.Provider value={{ timers, addTimer, removeTimer }}>
+        <TimerContext.Provider value={value}>
             {children}
         </TimerContext.Provider>
     );
