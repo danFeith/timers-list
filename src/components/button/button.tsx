@@ -5,8 +5,8 @@ interface IButtonProps {
     onClick: () => void
 }
 
-const Button = ({ text, onClick }: IButtonProps) => {
+const Button = React.memo(({ text, onClick }: IButtonProps) => {
     return <button onClick={onClick}>{text}</button>
-}
+})
 
-export default React.memo(Button);
+export { Button }

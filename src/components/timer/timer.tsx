@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useTimerStyles } from './timerStyles';
-import Button from '../button/button';
+import { useTimerStyles } from './styles';
+import { Button } from '../Button';
 
 interface ITimerProps {
     id: string;
@@ -14,12 +14,12 @@ const Timer = ({ id, onDelete }: ITimerProps) => {
     const animationFrameRef = useRef<number | null>(null);
     const lastTimestampRef = useRef<number>(performance.now());
 
-    const tick = (timestamp: number) => {
+    const tick = useCallback((timestamp: number) => {
         const delta = timestamp - lastTimestampRef.current;
         setTime(prev => prev + Math.floor(delta));
         lastTimestampRef.current = timestamp;
         animationFrameRef.current = requestAnimationFrame(tick);
-    };
+    }, [lastTimestampRef.current]);
 
 
     useEffect(() => {
@@ -36,11 +36,11 @@ const Timer = ({ id, onDelete }: ITimerProps) => {
     }, [isRunning]);
 
 
-    const formatTime = () => {
+    const formatTime = useCallback(() => {
         const seconds = Math.floor(time / 1000);
         const ms = time % 1000;
         return `${seconds}.${ms}`;
-    };
+    }, [time]);
 
 
     const reset = useCallback(() => setTime(0), []);
@@ -59,4 +59,4 @@ const Timer = ({ id, onDelete }: ITimerProps) => {
     );
 };
 
-export default Timer;
+export { Timer }

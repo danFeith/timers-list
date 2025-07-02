@@ -2,25 +2,25 @@ import { createContext, useContext, useMemo, useState } from 'react';
 import type { ReactNode } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 
-export type TimerData = {
+interface TimerData {
     id: string;
 };
 
-type TimerContextType = {
+interface ITimerContextType {
     timers: TimerData[];
     addTimer: () => void;
     removeTimer: (id: string) => void;
 };
 
-const TimerContext = createContext<TimerContextType | undefined>(undefined);
+const TimerContext = createContext<ITimerContextType | undefined>(undefined);
 
-export const useTimerContext = () => {
+const useTimerContext = () => {
     const context = useContext(TimerContext);
     if (!context) throw new Error('useTimerContext must be used within TimerProvider');
     return context;
 };
 
-export const TimerProvider = ({ children }: { children: ReactNode }) => {
+const TimerProvider = ({ children }: { children: ReactNode }) => {
     const [timers, setTimers] = useState<TimerData[]>([]);
 
     const value = useMemo(() => ({
@@ -40,3 +40,5 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
         </TimerContext.Provider>
     );
 };
+
+export { useTimerContext, TimerProvider }

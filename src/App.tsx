@@ -1,6 +1,6 @@
-import { TimerProvider } from './context/timerContext';
-import TimerList from './components/timerList/timerList';
-import AddTimerButton from './components/addTimerButton/addTimerButton';
+import { TimerProvider } from './Context/TimerContext';
+import { TimerList } from './components/TimerList';
+import { AddTimerButton } from './components/AddTimerButton';
 
 function App() {
   return (
@@ -14,4 +14,4 @@ function App() {
   );
 }
 
-export default App;
+export { App };

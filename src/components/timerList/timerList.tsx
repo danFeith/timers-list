@@ -1,9 +1,9 @@
 import React from 'react';
-import { useTimerContext } from '../../context/timerContext';
-import Timer from '../timer/timer';
-import { useTimerListStyles } from './timerListStyles';
+import { useTimerContext } from '../../Context/TimerContext';
+import { Timer } from '../Timer';
+import { useTimerListStyles } from './styles';
 
-const TimerList = () => {
+const TimerList = React.memo(() => {
     const { timers, removeTimer } = useTimerContext();
     const classes = useTimerListStyles()
     return (
@@ -15,6 +15,7 @@ const TimerList = () => {
             </div>
         </div>
     );
-};
+});
 
-export default React.memo(TimerList);
+export { TimerList }
+

@@ -1,6 +1,6 @@
 import { createUseStyles } from 'react-jss';
 
-export const useTimerStyles = createUseStyles({
+const useTimerStyles = createUseStyles({
   timerRow: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -20,3 +20,5 @@ export const useTimerStyles = createUseStyles({
     fontWeight: 'bold',
   },
 });
+
+export { useTimerStyles }
