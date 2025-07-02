@@ -2,7 +2,7 @@ import { TimerProvider } from './Context/TimerContext';
 import { TimerList } from './components/TimerList';
 import { AddTimerButton } from './components/AddTimerButton';
 
-function App() {
+export function App() {
   return (
     <TimerProvider>
       <div>
@@ -14,4 +14,3 @@ function App() {
   );
 }
 
-export { App };

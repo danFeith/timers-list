@@ -7,7 +7,7 @@ interface ITimerProps {
     onDelete: (id: string) => void;
 }
 
-const Timer = ({ id, onDelete }: ITimerProps) => {
+export const Timer = ({ id, onDelete }: ITimerProps) => {
     const classes = useTimerStyles();
     const [time, setTime] = useState(0);
     const [isRunning, setIsRunning] = useState(true);
@@ -58,5 +58,3 @@ const Timer = ({ id, onDelete }: ITimerProps) => {
         </div>
     );
 };
-
-export { Timer }
