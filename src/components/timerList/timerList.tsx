@@ -1,10 +1,15 @@
-import { useTimerContext } from '../../Context/TimerContext';
+import { memo } from 'react';
+import { useTimerContext, type ITimerData } from '../../Context/TimerContext';
 import { Timer } from '../Timer';
 import { useTimerListStyles } from './styles';
+import type { List } from 'immutable';
 
-export const TimerList = () => {
-    const { timers, removeTimer } = useTimerContext();
-    const classes = useTimerListStyles()
+const TimerList = memo(({ timers, removeTimer }: {
+    timers: List<ITimerData>;
+    removeTimer: (id: string) => void;
+}) => {
+    const classes = useTimerListStyles();
+
     return (
         <div>
             <div className={classes.timerList}>
@@ -14,6 +19,11 @@ export const TimerList = () => {
             </div>
         </div>
     );
-};
+});
 
+
+export const TimerListWrapper = () => {
+    const { timers, removeTimer } = useTimerContext();
+    return <TimerList timers={timers} removeTimer={removeTimer} />;
+};
 

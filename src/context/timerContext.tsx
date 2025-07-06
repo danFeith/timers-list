@@ -3,7 +3,7 @@ import { List } from 'immutable'
 import type { ReactNode } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 
-interface ITimerData {
+export interface ITimerData {
     id: string;
 };
 
