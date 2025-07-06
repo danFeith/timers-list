@@ -1,9 +1,9 @@
-import React from 'react';
 import { useTimerContext } from '../../Context/TimerContext';
+import { Button } from '../Button';
 
-export const AddTimerButton = React.memo(() => {
+export const AddTimerButton = () => {
     const { addTimer } = useTimerContext();
-    return <button onClick={addTimer}>Add Timer</button>;
-});
+    return <Button text='Add Timer' onClick={addTimer} />
+};
 
 

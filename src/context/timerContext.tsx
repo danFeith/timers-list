@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import { List } from 'immutable'
 import type { ReactNode } from 'react'
 import { v4 as uuidv4 } from 'uuid';
@@ -24,14 +24,18 @@ export const useTimerContext = () => {
 export const TimerProvider = ({ children }: { children: ReactNode }) => {
     const [timers, setTimers] = useState(List<ITimerData>());
 
+    const addTimer = useCallback(() => {
+        setTimers((prev) => prev.push({ id: uuidv4() }));
+    }, [])
+
+    const removeTimer = useCallback((id: string) => {
+        setTimers((prev) => prev.filter((t) => t.id !== id));
+    }, [])
+
     const value = useMemo(() => ({
         timers,
-        addTimer: () => {
-            setTimers((prev) => prev.push({ id: uuidv4() }));
-        },
-        removeTimer: (id: string) => {
-            setTimers((prev) => prev.filter((t) => t.id !== id));
-        }
+        addTimer,
+        removeTimer
 
     }), [timers])
 

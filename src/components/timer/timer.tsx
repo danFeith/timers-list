@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTimerStyles } from './styles';
 import { Button } from '../Button';
 
@@ -19,7 +19,7 @@ export const Timer = ({ id, onDelete }: ITimerProps) => {
         setTime(prev => prev + Math.floor(delta));
         lastTimestampRef.current = timestamp;
         animationFrameRef.current = requestAnimationFrame(tick);
-    }, [lastTimestampRef.current]);
+    }, []);
 
 
     useEffect(() => {
@@ -36,7 +36,7 @@ export const Timer = ({ id, onDelete }: ITimerProps) => {
     }, [isRunning]);
 
 
-    const formatTime = useCallback(() => {
+    const formatTime = useMemo(() => {
         const seconds = Math.floor(time / 1000);
         const ms = time % 1000;
         return `${seconds}.${ms}`;
@@ -49,7 +49,7 @@ export const Timer = ({ id, onDelete }: ITimerProps) => {
 
     return (
         <div className={classes.timerRow}>
-            <div className={classes.timerValue}>{formatTime()}</div>
+            <div className={classes.timerValue}>{formatTime}</div>
             <div className={classes.timerControls}>
                 <Button text={isRunning ? 'Pause' : 'Resume'} onClick={toggleIsRunning} />
                 <Button onClick={reset} text='Reset' />
